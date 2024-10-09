@@ -15,7 +15,11 @@ TWITTER_USERNAME = "AniNewsAndFacts"  # Twitter username to scrape
 def init_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Run in headless mode
-    chrome_service = ChromeService(executable_path='path/to/chromedriver')  # Update the path to your ChromeDriver
+    chrome_options.add_argument("--no-sandbox")  # Bypass OS security model
+    chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
+    chrome_options.add_argument("--remote-debugging-port=9222")  # Enable remote debugging
+
+    chrome_service = ChromeService(executable_path='/usr/local/bin/chromedriver')  # Specify the path
     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
     return driver
 
@@ -89,4 +93,7 @@ def main():
         time.sleep(60)  # Check every minute
 
 if __name__ == '__main__':
+    # Start a virtual display (optional)
+    os.system("Xvfb :99 -ac &")
+    os.environ["DISPLAY"] = ":99"  # Set display environment variable
     main()
